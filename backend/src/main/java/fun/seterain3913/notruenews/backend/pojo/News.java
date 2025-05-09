@@ -11,4 +11,5 @@ public class News {
     Integer id;
     String title;
     String content;
+
 }
