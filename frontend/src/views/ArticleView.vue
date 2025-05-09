@@ -1,22 +1,37 @@
 <template>
   <h2 id="title">{{ News.title }}</h2>
-  <hr>
+  <hr />
   <p>{{ News.content }}</p>
-  <hr>
+  <hr />
   <RouterLink to="/"><-回到列表</RouterLink>
-
 </template>
 
 <script setup lang="ts">
-import type { News } from '@/types';
-import { ref } from 'vue';
+import type { News } from '@/types'
+import axios from 'axios'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-const News = ref<News>({ id: 1, title: 'FFFF', content: 'FFFFF' })
-
+const News = ref<News>({ id: 0, title: '', content: '' })
+const route = useRoute()
+const router = useRouter()
+const getNews = () => {
+  axios({
+    url: `http://localhost/api/getNewsById?id=${route.query.id}`,
+    method: 'GET',
+  })
+    .then((res) => {
+      News.value = res.data
+    })
+    .catch((err) => {
+      router.push(`/err?errType=${err}`)
+    })
+}
+getNews()
 </script>
 
 <style lang="css" scoped>
-#title{
+#title {
   text-align: center;
 }
 </style>
